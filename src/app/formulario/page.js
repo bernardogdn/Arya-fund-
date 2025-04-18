@@ -37,7 +37,8 @@ export default function Formulario() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-black text-white p-8">
-      <h1 className="text-3xl font-bold mb-6">Formulário Financeiro</h1>
+      <img src="/logo.png" alt="Logo Arya Fund" className="w-32 h-auto mb-4" />
+      <h1 className="text-3xl font-bold mb-6">ARYA FUND</h1>
       <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
         <div>
           <label className="block mb-1">Nome da Empresa:</label>
