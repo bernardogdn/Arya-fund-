@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Perfeito! Agora que sei que estamos falando do Arya Fund, posso ajustar totalmente o README. Aqui vai uma versão inicial, considerando que o Arya Fund é um projeto (provavelmente web) com foco em análise de empresas para investimento, utilizando IA e integração com Airtable:
 
-## Getting Started
+⸻
 
-First, run the development server:
+🧠 Arya Fund
 
-```bash
+Arya Fund é uma plataforma inteligente que utiliza Inteligência Artificial para analisar empresas com base em dados preenchidos por usuários. A ferramenta foi pensada para facilitar o processo de tomada de decisão de investimento, oferecendo insights automatizados e integrando com o Airtable para armazenamento dos dados.
+
+⚙️ Funcionalidades
+	•	📋 Formulário de Avaliação de Empresas
+Coleta dados estratégicos e financeiros sobre uma empresa para análise.
+	•	🤖 Análise Inteligente via IA
+Avalia a atratividade da empresa com base em critérios objetivos e qualitativos.
+	•	🗃️ Integração com Airtable
+Armazena e organiza automaticamente os dados coletados.
+	•	💻 Deploy com Vercel
+Plataforma hospedada de forma gratuita e escalável.
+
+🛠️ Tecnologias Utilizadas
+	•	Next.js
+	•	React
+	•	Vercel
+	•	Airtable API
+	•	OpenAI API (futuramente, para análise via IA)
+
+📁 Estrutura do Projeto
+
+arya-fund/
+├── pages/
+│   ├── index.tsx          → Formulário de envio
+│   ├── status.tsx         → Acompanhamento de status
+│   └── api/
+│       └── submit.ts      → Rota que envia dados para o Airtable
+├── utils/
+│   └── airtable.ts        → Função de integração com a API do Airtable
+├── styles/
+│   └── globals.css
+├── .env.local             → Variáveis de ambiente
+└── README.md
+
+🔐 Configuração de Ambiente
+
+Crie um arquivo .env.local com as seguintes variáveis:
+
+AIRTABLE_API_KEY=seu_token_aqui
+AIRTABLE_BASE_ID=seu_id_de_base
+AIRTABLE_TABLE_NAME=EDERE
+
+Importante: nunca versionar esse arquivo nem expor os dados sensíveis.
+
+🚀 Como rodar localmente
+
+git clone https://github.com/seu-usuario/arya-fund.git
+cd arya-fund
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse: http://localhost:3000
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+✅ Status do Projeto
+	•	Integração com Airtable
+	•	Envio de dados via formulário
+	•	Página de acompanhamento
+	•	Implementação da IA para análise
+	•	Dashboard para investidores
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+📦 Deploy
 
-## Learn More
+O projeto está hospedado em:
+🔗 https://v0-next-js-project.vercel.app
 
-To learn more about Next.js, take a look at the following resources:
+🧠 Sobre o Arya Fund
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+A Arya Fund nasce da ideia de democratizar o acesso à análise de investimentos com uma abordagem automatizada, segura e educativa. O objetivo é auxiliar empreendedores e investidores a tomarem decisões baseadas em dados, com o suporte da tecnologia.
