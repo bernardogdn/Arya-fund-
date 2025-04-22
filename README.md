@@ -1,4 +1,3 @@
-Perfeito! Agora que sei que estamos falando do Arya Fund, posso ajustar totalmente o README. Aqui vai uma versão inicial, considerando que o Arya Fund é um projeto (provavelmente web) com foco em análise de empresas para investimento, utilizando IA e integração com Airtable:
 
 ⸻
 
