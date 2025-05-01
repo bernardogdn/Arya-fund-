@@ -66,7 +66,7 @@ Acesse: http://localhost:3000
 📦 Deploy
 
 O projeto está hospedado em:
-🔗 https://v0-next-js-project.vercel.app
+🔗https://arya-fund-gim5ou78v-bernardo-ardenghi-s-projects.vercel.app
 
 🧠 Sobre o Arya Fund
 
