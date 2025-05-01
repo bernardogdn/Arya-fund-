@@ -1,107 +1,112 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function Formulario() {
   const router = useRouter();
-  const [dados, setDados] = useState({
+  const [form, setForm] = useState({
     nome: "",
     receita: "",
     despesas: "",
     dividas: "",
     crescimento: "",
+    ebitda: "",
+    margemEbitda: "",
+    receitaRecorrente: "",
+    margemBruta: "",
+    receitaBruta: "",
+    giroAtivo: "",
+    valuation: "",
+    riscos: "",
+    insights: "",
   });
 
   const handleChange = (e) => {
-    setDados({ ...dados, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      // ENVIA OS DADOS PARA O AIRTABLE
-      await axios.post("/api/enviar", dados);
-      alert("Dados enviados com sucesso!");
+    const payload = {
+      nome: form.nome,
+      receita: form.receita,
+      despesas: form.despesas,
+      dividas: form.dividas,
+      crescimento: form.crescimento,
+      ebitda: form.ebitda,
+      margemEbitda: form.margemEbitda,
+      receitaRecorrente: form.receitaRecorrente,
+      margemBruta: form.margemBruta,
+      receitaBruta: form.receitaBruta,
+      giroAtivo: form.giroAtivo,
+      valuation: form.valuation,
+      riscos: form.riscos,
+      insights: form.insights,
+    };
 
-      // SALVA LOCAL E REDIRECIONA
-      localStorage.setItem("dadosEmpresa", JSON.stringify(dados));
-      router.push("/resultado");
-    } catch (error) {
-      console.error("Erro ao enviar:", error);
-      alert("Erro ao enviar dados.");
+    try {
+      const res = await fetch("/api/enviar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      console.log("Resposta da API:", data);
+
+      if (res.ok && data.id) {
+        router.push(`/resultado/${data.id}`);
+      } else {
+        alert("Erro ao cadastrar empresa.");
+      }
+    } catch (err) {
+      console.error("Erro ao enviar:", err);
+      alert("Erro de conexão.");
     }
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-black text-white p-8">
-      <img src="/logo.png" alt="Logo Arya Fund" className="w-32 h-auto mb-4" />
-      <h1 className="text-3xl font-bold mb-6">ARYA FUND</h1>
-      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
-        <div>
-          <label className="block mb-1">Nome da Empresa:</label>
-          <input
-            type="text"
-            name="nome"
-            value={dados.nome}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded border border-white bg-white text-black"
-            required
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Receita Mensal:</label>
-          <input
-            type="number"
-            name="receita"
-            value={dados.receita}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded border border-white bg-white text-black"
-            required
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Despesas Mensais:</label>
-          <input
-            type="number"
-            name="despesas"
-            value={dados.despesas}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded border border-white bg-white text-black"
-            required
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Dívidas Totais:</label>
-          <input
-            type="number"
-            name="dividas"
-            value={dados.dividas}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded border border-white bg-white text-black"
-            required
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Crescimento (%) ao ano:</label>
-          <input
-            type="number"
-            name="crescimento"
-            value={dados.crescimento}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded border border-white bg-white text-black"
-            required
-          />
-        </div>
+    <div className="min-h-screen bg-black text-white p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">Formulário de Avaliação</h1>
+      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
+        {[
+          ["nome", "Nome da Empresa", "text"],
+          ["receita", "Receita", "number"],
+          ["despesas", "Despesas", "number"],
+          ["dividas", "Dívidas", "number"],
+          ["crescimento", "Crescimento (%)", "number"],
+          ["ebitda", "EBITDA", "number"],
+          ["margemEbitda", "Margem EBITDA (%)", "number"],
+          ["receitaRecorrente", "Receita Recorrente", "number"],
+          ["margemBruta", "Margem Bruta (%)", "number"],
+          ["receitaBruta", "Receita Bruta", "number"],
+          ["giroAtivo", "Giro do Ativo", "number"],
+          ["valuation", "Valuation", "number"],
+          ["riscos", "Riscos", "text"],
+          ["insights", "Insights Qualitativos", "text"],
+        ].map(([name, label, type]) => (
+          <div key={name}>
+            <label className="block mb-1 font-semibold">{label}</label>
+            <input
+              type={type}
+              name={name}
+              value={form[name]}
+              onChange={handleChange}
+              required={name !== "riscos" && name !== "insights"}
+              className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600"
+            />
+          </div>
+        ))}
+
         <button
           type="submit"
-          className="bg-white text-black px-6 py-3 rounded font-medium hover:bg-gray-200"
+          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded"
         >
-          Enviar
+          Enviar e Ver Resultado
         </button>
       </form>
-    </main>
+    </div>
   );
 }
