@@ -7,6 +7,7 @@ export default function ResultadoPorId() {
   const { id } = useParams();
   const router = useRouter();
   const [dados, setDados] = useState(null);
+  const [diligencias, setDiligencias] = useState([]);
 
   function calcularNotaGeral(dados) {
     let nota = 0;
@@ -38,12 +39,23 @@ export default function ResultadoPorId() {
         dados.notaGeral = calcularNotaGeral(dados);
         setDados(dados);
       } catch (error) {
-        console.error("Erro de rede ao buscar empresa:", error);
+        console.error("Erro ao buscar empresa:", error);
+      }
+    }
+
+    async function buscarDiligencias() {
+      try {
+        const res = await fetch(`/api/diligencias?id=${id}`);
+        const data = await res.json();
+        setDiligencias(data.records || []);
+      } catch (error) {
+        console.error("Erro ao buscar diligências:", error);
       }
     }
 
     if (id) {
       buscarEmpresa();
+      buscarDiligencias();
     }
   }, [id]);
 
@@ -86,6 +98,37 @@ export default function ResultadoPorId() {
         <p className="text-lg font-bold text-cyan-300">
           ⭐ Nota Geral: {dados.notaGeral}/100
         </p>
+      </div>
+
+      {/* Seção de Due Diligence sempre visível */}
+      <div className="bg-gray-900 p-6 rounded-lg shadow-lg max-w-3xl mx-auto mt-12 space-y-6">
+        <h2 className="text-2xl font-bold text-center text-yellow-500 mb-4">
+          📋 Due Diligence ({diligencias.length})
+        </h2>
+        {diligencias.length === 0 ? (
+          <p className="text-center text-gray-400">Nenhuma diligência registrada para esta empresa.</p>
+        ) : (
+          diligencias.map((d, i) => {
+            const f = d.fields || {};
+            return (
+              <div key={i} className="bg-gray-800 p-4 rounded-lg space-y-1">
+                <p><strong>Tipo:</strong> {f["Tipo de Diligência"]}</p>
+                <p><strong>Item:</strong> {f["Item Analisado"]}</p>
+                <p><strong>Status:</strong> {f["Status da Análise"]}</p>
+                <p><strong>Risco:</strong> {f["Classificação de Risco"]}</p>
+                <p><strong>Comentários:</strong> {f["Comentários"]}</p>
+                {f["Documento"] && (
+                  <p>
+                    <strong>Documento:</strong>{" "}
+                    <a href={f["Documento"]} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">
+                      Link
+                    </a>
+                  </p>
+                )}
+              </div>
+            );
+          })
+        )}
       </div>
 
       <div className="flex justify-center mt-8">

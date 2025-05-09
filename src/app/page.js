@@ -10,11 +10,15 @@ export default function Home() {
   useEffect(() => {
     async function fetchEmpresas() {
       try {
-        const res = await fetch("https://api.airtable.com/v0/appoSPvXiuqHQ93Df/tblptHvfkGrPZESRH", {
-          headers: {
-            Authorization: `Bearer patelJIUhYK2tqQ9Z.c69eeff568c03a051fdcce0e343811a49c3e56c93c959075fce17e7001223cb5`
+        const res = await fetch(
+          "https://api.airtable.com/v0/appoSPvXiuqHQ93Df/tblptHvfkGrPZESRH",
+          {
+            headers: {
+              Authorization:
+                "Bearer patelJIUhYK2tqQ9Z.c69eeff568c03a051fdcce0e343811a49c3e56c93c959075fce17e7001223cb5",
+            },
           }
-        });
+        );
         const data = await res.json();
         setEmpresas(data.records || []);
       } catch (err) {
@@ -26,7 +30,7 @@ export default function Home() {
   }, []);
 
   const topEmpresas = [...empresas]
-    .filter(e => typeof e.fields?.["Nota Geral"] === "number")
+    .filter((e) => typeof e.fields?.["Nota Geral"] === "number")
     .sort((a, b) => b.fields["Nota Geral"] - a.fields["Nota Geral"])
     .slice(0, 3);
 
@@ -67,12 +71,14 @@ export default function Home() {
           )}
         </div>
 
-        <button
-          onClick={() => router.push("/formulario")}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded mt-4"
-        >
-          Começar análise
-        </button>
+        <div className="flex justify-center gap-4 mb-8">
+          <button
+            onClick={() => router.push("/formulario")}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded"
+          >
+            Começar análise
+          </button>
+        </div>
 
         <h2 className="text-2xl font-semibold mt-12 mb-4">
           Empresas já avaliadas
@@ -98,12 +104,20 @@ export default function Home() {
                       Nota Geral: {nota} / 100
                     </p>
                   </div>
-                  <button
-                    onClick={() => router.push(`/resultado/${id}`)}
-                    className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded"
-                  >
-                    Ver análise
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => router.push(`/resultado/${id}`)}
+                      className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded"
+                    >
+                      Ver análise
+                    </button>
+                    <button
+                      onClick={() => router.push(`/diligencia/${id}`)}
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded"
+                    >
+                      Criar Due Diligence
+                    </button>
+                  </div>
                 </li>
               );
             })}
