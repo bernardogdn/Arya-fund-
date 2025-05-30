@@ -47,6 +47,7 @@ export async function POST(req) {
     "Valuation": Number(body.valuation),
     "Riscos": body.riscos,
     "Insights Qualitativos": body.insights,
+    "Ineficiencias": body.ineficiencias || "", // ✅ novo campo incluído
     "Avaliação Final": [avaliacaoFinal], // MULTISELECT no Airtable
     "Nota Geral": notaGeral,
   };

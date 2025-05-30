@@ -20,6 +20,7 @@ export default function Formulario() {
     valuation: "",
     riscos: "",
     insights: "",
+    ineficiencias: "", // novo campo
   });
 
   const handleChange = (e) => {
@@ -44,6 +45,7 @@ export default function Formulario() {
       valuation: form.valuation,
       riscos: form.riscos,
       insights: form.insights,
+      ineficiencias: form.ineficiencias, // incluir no payload
     };
 
     try {
@@ -99,6 +101,19 @@ export default function Formulario() {
             />
           </div>
         ))}
+
+        {/* CAMPO DE INEFICIÊNCIAS */}
+        <div>
+          <label className="block mb-1 font-semibold">Ineficiências encontradas</label>
+          <textarea
+            name="ineficiencias"
+            value={form.ineficiencias}
+            onChange={handleChange}
+            placeholder="Ex: processos manuais, alta rotatividade, baixa retenção de clientes..."
+            className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600"
+            rows={4}
+          />
+        </div>
 
         <button
           type="submit"
