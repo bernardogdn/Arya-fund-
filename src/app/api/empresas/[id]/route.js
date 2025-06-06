@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET(_request, context) {
-  const { id } = context.params;
+  const id  = context?.params?.id;
 
   try {
     const res = await fetch(

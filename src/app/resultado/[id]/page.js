@@ -10,6 +10,56 @@ export default function ResultadoPorId() {
   const [diligencias, setDiligencias] = useState([]);
   const [analiseIA, setAnaliseIA] = useState("");
 
+  async function enviarParaConsultorVirtual() {
+    // if (!dados) return alert("Dados ainda não carregados.");
+    const payload = {
+      Receita: String(dados.Receita || ""),
+      Despesas: String(dados.Despesas || ""),
+      Dívidas: String(dados.Dívidas || ""),
+      Crescimento: String(dados.Crescimento || ""),
+      EBTIDA: String(dados.EBITDA || ""),
+      "Margem EBITDA": String(dados["Margem EBITDA"] || ""),
+      "Receita Recorrente": String(dados["Receita Recorrente"] || ""),
+      "Margem Bruta": String(dados["Margem Bruta"] || ""),
+      "Receita Bruta": String(dados["Receita Bruta"] || ""),
+      "Giro do Ativo": String(dados["Giro do Ativo"] || ""),
+      "Avaliação Final": String(dados["Avaliação Final"] || ""),
+      Riscos: String(dados.Riscos || ""),
+      "Insights Qualitavos": String(dados["Insights Qualitativos"] || ""),
+      Valuation: String(dados.Valuation || ""),
+      "Nota Geral": String(dados.notaGeral || ""),
+      ID: id,
+      DueDilligence: diligencias
+        .map(
+          (d) =>
+            `${d.fields["Tipo de Diligência"]} (${d.fields["Item Analisado"]}, ${d.fields["Status da Análise"]}, risco: ${d.fields["Classificação de Risco"]})`
+        )
+        .join(" | "),
+      Ineficiencias: String(dados.Ineficiencias || ""),
+    };
+
+    try {
+      const res = await fetch("https://bernardo1010.app.n8n.cloud/webhook/analisar-empresa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        alert("✅ Análise recebida com sucesso!");
+        setAnaliseIA(result.analise_executiva || "Resposta recebida, mas sem conteúdo.");
+      } else {
+        alert("❌ Erro ao gerar análise.");
+        console.error("Erro da API:", result);
+      }
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+      alert("❌ Erro de conexão.");
+    }
+  }
+
   function calcularNotaGeral(dados) {
     let nota = 0;
     const receita = Number(dados.Receita || 0);
@@ -203,6 +253,7 @@ Prompt para IA,"${prompt.replace(/\n/g, ' ')}"`;
             onClick={exportarTXT}
             className="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-4 rounded"
           >
+
             Exportar TXT
           </button>
           <button
@@ -210,6 +261,12 @@ Prompt para IA,"${prompt.replace(/\n/g, ' ')}"`;
             className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-1 px-4 rounded"
           >
             Exportar CSV
+          </button>
+          <button
+            onClick={enviarParaConsultorVirtual}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-4 rounded"
+          >
+            🚀 Análise de Expansão e Saída
           </button>
         </div>
 
@@ -257,52 +314,52 @@ Prompt para IA,"${prompt.replace(/\n/g, ' ')}"`;
           ⭐ Nota Geral: {dados.notaGeral}/100
         </p>
       </div>
-<div className="bg-gray-900 p-6 rounded-lg shadow-lg max-w-3xl mx-auto mt-12 space-y-6">
-  <h2 className="text-2xl font-bold text-center text-yellow-500 mb-4">
-    📋 Due Diligence ({diligencias.length})
-  </h2>
-  {diligencias.length === 0 ? (
-    <p className="text-center text-gray-400">Nenhuma diligência registrada para esta empresa.</p>
-  ) : (
-    diligencias.map((d, i) => {
-      const f = d.fields || {};
-      return (
-        <div key={i} className="bg-gray-800 p-4 rounded-lg space-y-1">
-          <p><strong>Tipo:</strong> {f["Tipo de Diligência"]}</p>
-          <p><strong>Item:</strong> {f["Item Analisado"]}</p>
-          <p><strong>Status:</strong> {f["Status da Análise"]}</p>
-          <p><strong>Risco:</strong> {f["Classificação de Risco"]}</p>
-          <p><strong>Comentários:</strong> {f["Comentários"]}</p>
-          {f["Documento"] && (
-            <p>
-              <strong>Documento:</strong>{" "}
-              <a href={f["Documento"]} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">
-                Link
-              </a>
-            </p>
-          )}
+      <div className="bg-gray-900 p-6 rounded-lg shadow-lg max-w-3xl mx-auto mt-12 space-y-6">
+        <h2 className="text-2xl font-bold text-center text-yellow-500 mb-4">
+          📋 Due Diligence ({diligencias.length})
+        </h2>
+        {diligencias.length === 0 ? (
+          <p className="text-center text-gray-400">Nenhuma diligência registrada para esta empresa.</p>
+        ) : (
+          diligencias.map((d, i) => {
+            const f = d.fields || {};
+            return (
+              <div key={i} className="bg-gray-800 p-4 rounded-lg space-y-1">
+                <p><strong>Tipo:</strong> {f["Tipo de Diligência"]}</p>
+                <p><strong>Item:</strong> {f["Item Analisado"]}</p>
+                <p><strong>Status:</strong> {f["Status da Análise"]}</p>
+                <p><strong>Risco:</strong> {f["Classificação de Risco"]}</p>
+                <p><strong>Comentários:</strong> {f["Comentários"]}</p>
+                {f["Documento"] && (
+                  <p>
+                    <strong>Documento:</strong>{" "}
+                    <a href={f["Documento"]} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">
+                      Link
+                    </a>
+                  </p>
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Exibir Ineficiências */}
+      {dados.Ineficiencias && (
+        <div className="bg-red-900 text-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto mt-12">
+          <h2 className="text-2xl font-bold text-yellow-300 mb-2">⚠️ Ineficiências Apontadas</h2>
+          <p className="whitespace-pre-wrap text-white text-sm">{dados.Ineficiencias}</p>
         </div>
-      );
-    })
-  )}
-</div>
+      )}
 
-{/* Exibir Ineficiências */}
-{dados.Ineficiencias && (
-  <div className="bg-red-900 text-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto mt-12">
-    <h2 className="text-2xl font-bold text-yellow-300 mb-2">⚠️ Ineficiências Apontadas</h2>
-    <p className="whitespace-pre-wrap text-white text-sm">{dados.Ineficiencias}</p>
-  </div>
-)}
-
-<div className="flex justify-center mt-8">
-  <button
-    onClick={() => router.push("/")}
-    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-  >
-    Voltar ao início
-  </button>
-</div>
-</div>
-);
+      <div className="flex justify-center mt-8">
+        <button
+          onClick={() => router.push("/")}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Voltar ao início
+        </button>
+      </div>
+    </div>
+  );
 }
